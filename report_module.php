@@ -1,0 +1,85 @@
+	<?php
+        mysql_connect("localhost","root","M4Buh47k4");
+mysql_select_db("pdshis");
+        $query = "SELECT * from reports_format where searchable='Y' order by disease_code ASC";
+	$array_code = mysql_query($query);        
+        $code_list              = array();
+        $current_code   = array();
+ ?>
+ <table style="border:gray 1px solid;" border="1" class="search">
+    <tr align="center">
+        <td>DIAGNOSIS</td>
+        <td>TOTAL</td>
+    </tr>
+<?php
+$rank=array(1=>"");
+$x=1;
+while ($row = mysql_fetch_array($array_code))
+    {
+            $report_code[$x]    = $row['disease_code'];
+            $diagnosis[$x]      = ucwords($row['name']);
+     
+            if(!in_array($report_code[$x], $current_code))
+            {
+                    $current_code[] = $report_code[$x];
+            }
+     
+            //-- Check if the report code is a subset of the existing codes in the current code array --//
+           
+            foreach($current_code as $c)
+            {
+                    if(strpos($c, $report_code[$x]) !== false)
+                    {
+                            if(!key_exists($report_code[$x],$code_list))
+                            {
+                                    $code_list[$report_code[$x]] = array();
+                            }
+     
+                            if(!in_array($diagnosis[$x],$code_list[$report_code[$x]]))
+                            {
+                                    $code_list[$report_code[$x]][] = $diagnosis[$x];
+                            }
+                    }
+     
+                    if(strpos($report_code[$x], $c) !== false)
+                    {
+                            if(!key_exists($c,$code_list))
+                            {
+                                    $code_list[$c] = array();
+                            }
+     
+                            if(!in_array($diagnosis[$x],$code_list[$c]))
+                            {
+                                    $code_list[$c][] = $diagnosis[$x];
+                            }
+                    }
+            }
+            $x++;
+    }
+    $x=1; $count = count($rank); while($x<=$count)
+        {
+    foreach($code_list as $key => $value)
+    {
+        $diagnosis_string = "'".implode("','",$value)."'";
+ 
+        //-- Build Query String --//
+        $query_string = mysql_query("SELECT count(diagnosis) FROM out_patient_details WHERE diagnosis IN ($diagnosis_string)");
+        $total = mysql_fetch_array($query_string);
+        if ($diagnosis[$x] == 'Algal Infectious Diseases' || $diagnosis[$x] == 'Bacterial Infectious Diseases')
+        {
+            $diagnosis[$x] = "<b>".$diagnosis[$x]."</b>";
+        }
+        $words = str_replace('.','',$report_code[$x]);
+        
+        echo "<tr align='center'>";
+                echo "<td colspan='".strlen($words)."'></td>";
+		echo "<td>".$report_code[$x]."</td>";
+		echo "<td>".$diagnosis[$x]."</td>";
+                echo "<td>".$total[0]."</td>";
+	$x++;
+                echo "<tr>"; 
+        }
+        }
+	echo "</table>";
+    ?>
+

@@ -1,0 +1,142 @@
+
+.index_input
+{
+	font-family: Tahoma, Verdana, Helvetica, sans-serif,arial;
+	font-size: 16px;
+	border: 1px solid #6699CC;
+	height: 30px;
+	padding-left: 4px;
+	-moz-border-radius:10px;
+}
+.index_label
+{
+	font-family: Tahoma, Verdana, Helvetica, sans-serif,arial;
+	font-size: 16px;
+}
+.submit
+{	
+    background-color: #5B74d9;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    font-weight: bold;
+    border-color: #29447E #29447E #1A356E;
+    color: #ffffff;
+    font-size:19px;
+}
+.search
+{
+	font-size:12px;
+	font-weight: bold;
+	font-family:Tahoma,Arial,Verdana,sans-serif;
+	text-align:center;
+}
+.ans
+{
+	font-size:12px;
+	font-weight:bold;
+	font-family:tahoma;
+	size:20;
+}
+.question
+{
+	font-size:16px;
+	font-family:Tahoma,Arial,Verdana,sans-serif;
+	text-align:right;
+}
+.header
+{
+	font-size:10px;
+	font-family:Tahoma,Arial,Verdana,sans-serif;
+	text-align:center;
+}
+.regis
+{
+	padding-left:1%;
+}
+.reg
+{
+	padding-top:2%;
+}
+
+a:link {color: black;}
+a:visited {color: black;}
+a:hover {color: red;}
+a{
+	color:#000;
+}
+input.submit
+{
+	-moz-border-radius:10px;
+	border:black 1px solid;
+	cursor: crosshair;
+}
+.msg
+{
+	color:red;
+	font-family:Tahoma,Arial,Verdana,sans-serif;
+	font-size:20px;
+	text-align:center;
+	font-weight:bold;
+}
+.header
+{
+	font-size: 20px;
+	font-family:Tahoma, Verdana, Helvetica, sans-serif,arial;
+	font-weight: bold;
+	text-align:center;
+	
+}.headers
+{
+	font-size: 20px;
+	font-family:tahoma,arial;
+	
+}
+.info
+{
+	font-size: 15px;
+	font-family: tahoma,arial;
+	font-weight:bold;
+}
+table
+{
+	border:gray 1px solid;
+	width:99.3%;
+}
+input.a
+{
+	font-family: Tahoma, Verdana, Helvetica, sans-serif,arial;
+	font-size: 14px;
+	border: 1px solid #6699CC;;
+	height: 30px;
+	padding-left: 4px;
+	-moz-border-radius:10px;
+	size:25px;
+}
+.categ
+{
+    font-size:12px;
+    font-weight:bold;
+    font-family:tahoma;
+    text-align:center;
+    color:red;
+}
+.head
+{
+    font-size:20px;
+    font-weight:bold;
+    font-family:tahoma;
+    text-align:center;
+    color:black;
+}
+    .scroll
+    {
+height: 60%;
+width: 30%;
+overflow: auto;
+border: 1px solid #666;
+background-color: #ccc;
+padding: 8px;
+position:absolute;
+top:500px;
+left:850px;
+}

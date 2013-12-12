@@ -1,0 +1,124 @@
+<?php
+include("connection/connection.php");
+if(isset($_POST['submit']))
+{
+$result = mysql_query("SELECT patients_info.id as pi_id,
+		      out_patient.id as out_id,
+		      out_patient.users_id,
+		      hospital_id,
+		      consultation_date,
+		      registration_status,
+		      patients_info.lastname as pi_lname,
+		      patients_info.firstname as pi_fname,
+		      patients_info.middle_initials as pi_mi,
+		      age,gender,contact_number,address,municipality_id,province_id,
+		      users.id as u_id,
+		      users.lastname as u_lname,
+		      users.firstname as u_fname,
+		      users.middle_initials as u_mi,
+		      consultants.lastname as cons_lname,
+		      consultants.firstname as cons_fname,
+		      consultants.middle_initials as cons_mi
+		      from patients_info,out_patient,users,consultants where
+		      patients_info.id = out_patient.patients_info_id
+		      and out_patient.users_id = users.id
+		      and out_patient.consultant_id = consultants.id
+		      and consultation_date between '2001-12-07' and '2010-06-04'");
+   $x=0;
+    while($row = mysql_fetch_array($result))
+    {
+    //Explode Consultation Date
+    $consultation_date = explode('-',$row['consultation_date']);
+    $date_of_consultation = $consultation_date[1].'/'.$consultation_date[2].'/'.$consultation_date[0];
+    $consult_date[$x] = $date_of_consultation;
+    $id[$x] = $row['out_id'];
+    $patient_id[$x] = $row['pi_id'];
+    $resident[$x] = $row['u_lname'].', '.$row['u_fname'].' '.$row['u_mi']. '.';
+    $consultant[$x] = $row['cons_lname'].', '.$row['cons_fname'].' '.$row['cons_mi']. '.';
+    $registration_status[$x] = $row['registration_status'];
+    $hospital_id[$x] = $row['hospital_id'];
+    $lname[$x] = $row['pi_lname'];
+    $fname[$x] = $row['pi_fname'];
+    $minitials[$x] = $row['pi_mi'];
+    $age[$x] = $row['age'];
+    $gender[$x] = $row['gender'];
+    $contact[$x] = $row['contact_number'];
+    $address[$x] = $row['address'];
+    $municipality[$x] = $row['municipality_id'];
+    $province[$x] = $row['province_id'];
+    $comorbidities[$x] = $row['comorbidities'];
+   $x++;
+    }
+}
+    ?>
+    <div align="center">
+<table style="border:gray 1px solid;"  border =1 class="search" width="2000" cellpadding="0" cellspacing="0">
+<tr style="font-size:12px;">
+ <td>Derm Registration No.</td>
+    <td width="10%">Consultation Date</td>
+    <td width="70%">Hospital/Clinic OPD ID No.</td>
+    <td width="40%">Derm Resident</td>
+    <td>Consultant</td>
+    <td>Registration Status</td>
+    <td>Lastname</td>
+    <td>Firstname</td>
+    <td>Middleinitials</td>
+    <td>Age</td>
+    <td>Gender</td>
+    <td>Contact Number</td>
+    <td>Address</td>
+    <td>Municipality</td>
+    <td>Province</td>
+<?php
+$header=mysql_query("SELECT consultation_date,out_patient_id,count(*) as count from out_patient_details,out_patient
+		    where out_patient.id = out_patient_details.out_patient_id
+		    and consultation_date between '2001-12-07' and '2010-06-04' group by out_patient_id order by count DESC Limit 1");
+$data = mysql_fetch_array($header);
+    $total =  $data['count'];
+    for ($c=1;$c<=$total;$c++)
+    {
+	echo "<td align='center'><b>DIAGNOSIS $c</b></td>
+	<td align='center'><b>New/Ffup$c</b></td>
+	<td align='center'><b>Prov/Final$c</b></td>";
+    }
+    for ($d=1;$d<=$total;$d++)
+    {
+	echo "<td align='center'><b>CO Dx$d</b></td>";
+    }
+    echo "</tr>";
+    
+    
+    for($i = 0; $i < $x; $i++)
+    {
+    $result1 = mysql_query("SELECT * from out_patient_details where out_patient_id ='$id[$i]'");
+     echo "<tr>
+     <td align='center'><b>".$patient_id[$i]."</b></td>
+     <td align='center'><b>".$consult_date[$i]."</b></td>
+     <td align='center'><b>".$hospital_id[$i]."</b></td>
+     <td align='center'><b>".$resident[$i]."</b></td>
+     <td align='center'><b>".$consultant[$i]."</b></td>
+     <td align='center'><b>".$registration_status[$i]."</b></td>
+     <td align='center'><b>".$lname[$i]."</b></td>
+     <td align='center'><b>".$fname[$i]."</b></td>
+     <td align='center'><b>".$minitials[$i]."</b></td>
+     <td align='center'><b>".$age[$i]."</b></td>
+     <td align='center'><b>".$gender[$i]."</b></td>
+     <td align='center'><b>".$contact[$i]."</b></td>
+     <td align='center'><b>".$address[$i]."</b></td>
+     <td align='center'><b>".$municipality[$i]."</b></td>
+     <td align='center'><b>".$province[$i]."</b></td>";
+    while($rows = mysql_fetch_array($result1))
+    {
+        echo "<td align=center class=categ>".$rows['diagnosis'].''.$rows['other_diagnosis']."</td>";
+        echo "<td align=center class=categ>".$rows['problems']."</td>";
+        echo "<td align=center class=categ>".$rows['results']."</td>";
+    }
+    $result2 = mysql_query("SELECT * from out_patient_details where out_patient_id ='$id[$i]'");
+     while($rowss = mysql_fetch_array($result2))
+     
+    {
+    echo "<td align='center'>".$rowss['management_plans']."</td>";
+    }
+    }
+    echo "</tr></table></div>";
+    ?>
